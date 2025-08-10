@@ -561,7 +561,7 @@ set rmargin 2
         parameter_list["MATRIX_reference"] = self.plot_properties.get("reference","XXXX.XXXXX") # set it to something meaningful later
 # not used    parameter_list["MATRIX_version"] = self.plot_properties.get("version","0.0.1alpha") # set it to something meaningful later
         if self.plot_properties.get("legend","right") == "right":
-            parameter_list["key_x"]  = 1.00 # x-position of key 
+            parameter_list["key_x"]  = 0.95 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "left":
             parameter_list["key_x"]  = 0.58 # x-position of key 
@@ -570,10 +570,10 @@ set rmargin 2
             parameter_list["key_x"]  = 0.82 # x-position of key 
             parameter_list["key_y"]  = 0.22 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down center":
-            parameter_list["key_x"]  = 0.80 # x-position of key 
+            parameter_list["key_x"]  = 0.70 # x-position of key 
             parameter_list["key_y"]  = 0.27 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
-            parameter_list["key_x"]  = 0.80 # x-position of key 
+            parameter_list["key_x"]  = 0.70 # x-position of key 
             parameter_list["key_y"]  = 0.19 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down left":
             parameter_list["key_x"]  = 0.55 # x-position of key 
@@ -1113,7 +1113,7 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
 
 if __name__ == "__main__":
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"MATRIX_NNLO_31_inclusive_sumETscale-run/distributions/*.dat"))
-    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/jun8-exactNLO-lhe-run/distributions/*.dat"))
+    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/jun10-lheanalysis-MiNNLOPSk05-run/distributions/*.dat"))
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"run_nnpdf31_new_kq05_inclusive_lhef-run/distributions/*.dat"))
 
     out = print_output()
@@ -1126,45 +1126,9 @@ if __name__ == "__main__":
 
         gnu = gnuplot(os.getcwd())
         
-#        plot_MATRIX_NNLO = plot
-#        plot_MATRIX_NNLO_30 = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_30-run")
-#        plot_MATRIX_NNLO_31_inclusive = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_31_inclusive-run")
-
-#        plot_MATRIX_NNLO_31_inclusive_mT = plot
-#        plot_MATRIX_NNLO_31_inclusive_Q = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_Qscale").replace("NNLO_QCD","NNLO_QCD_Qscale")
-#        plot_MATRIX_NNLO_31_inclusive_fixed = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_fixedscale").replace("NNLO_QCD","NNLO_QCD_fixedscale")
-#        plot_MATRIX_NNLO_31_inclusive_sumET = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_sumETscale").replace("NNLO_QCD","NNLO_QCD_sumETscale")
-#        plot_MATRIX_NNLO_31_inclusive_sumET = plot
-        plot_exact = plot
-        plot_novirt = plot.replace("jun8-exactNLO","jun10-novirtNLO")
-        plot_soft = plot.replace("jun8-exactNLO","jun13-softNLOsvart")
-#        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
-#        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
-#        plot_minnlofo = plot.replace("pths-h50-k025-lhe","FOhs-h50-k025-lhe").replace("MiNNLOlhe1","MiNNLOlhe2")
-#        plot_minnlolhefo = plot.replace("NNLLKQ05-run","FOh00-k05-clhe").replace("NNLLKQ05","MiNNLOlhe3")
-#        plot_nnlo5 = plot.replace("MiNNLO5FS-bjet","MiNNLO-test14jul") 
-#        plot_minnlo2= plot.replace("NNLO_NNLL_k025_zoom-run","pt-h50-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe1")
-#        plot_minnlo1= plot.replace("NNLO_NNLL_k025_zoom-run","pt51-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe4") 
-#        plot_nnll= plot.replace("NNLOmw-run","NNLO_NNLLmw-run").replace("NNLOmw","NNLO_NNLLmw")
-#        plot_minnlo2= plot.replace("NNLO-NNLL-40","NNPDF40-pt51-k025-lhe").replace("MW","MiNNLOlhe2")
-#        plot_4= plot.replace("FO40-h51-k025-Mpy6","FO40-h51-k075-Mpy1").replace("MiNNLOpy6","MiNNLOpy1")
-#        plot_3= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k05").replace("MW","MiNNLOpy")
-#        plot_4= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k075").replace("MiNNLOpy3","MiNNLOpy5")
-#        plot_4= plot.replace("PY0-run","PY1-r01-run").replace("PY0","PY1-r01")
-#        plot_lhe =  plot.replace("LHE-mh125", "LHE-mh200").replace("MiNNLOlhe","MiNNLOphe")
-#        plot_tre =  plot.replace("NNPDF30-FO51", "NNPDF30-pt51").replace("MiNNLO1","MiNNLO2")
-
-        # plot_third_run_lhef = plot.replace("MATRIX_NNLO", "third_run_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
-        # plot_third_run_high_stat_lhef = plot.replace("MATRIX_NNLO", "third_run_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
-        # plot_run_nnpdf31_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
-        # plot_run_nnpdf31_high_stat_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
-        # plot_run_nnpdf31_new_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
-        # plot_run_nnpdf31_new_kq05_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_kq05_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq05_inclusive_lhef")
-        # plot_run_nnpdf31_new_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "run_nnpdf31_new_kq1_inclusive_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq1_inclusive_lhef")
-#        plot_run_nnpdf31_new_kq05_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_sumETscale-run", "run_nnpdf31_new_kq05_inclusive_lhef-run").replace("__NNLO_QCD_sumETscale","__run_nnpdf31_new_kq05_inclusive_lhef")
-#        plot_run_nnpdf31_new_kq05_inclusive_final_lhef = plot.replace("MATRIX_NLOqq_EW_incl_sum-run", "NLO_lhef-run").replace("__NLOqq_EW","__NLO_lhef")
-
-
+        plot_minnloH20 = plot
+        plot_minnloH2soft = plot.replace("jun10-lheanalysis-MiNNLOPSk05","jul26-lheanalysis-MiNNLOPSk05soft")
+        plot_minnloH2masFC = plot.replace("jun10-lheanalysis-MiNNLOPSk05","aug10-lheanalysis-MiNNLOPSk05massFC")
 
 
         counter = 0
@@ -1193,9 +1157,9 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_nnll,{"format" : "histogram", "label" : "NNLO-NNLL' (MW)","line_style" : 2})
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
-        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 1})
-        gnu.add_curve(plot_novirt,{"format" : "histogram", "label" : "NLO_{PS} (virt=0)","line_style" : 3})
-        gnu.add_curve(plot_soft,{"format" : "histogram", "label" : "NLO_{PS} (approx virt)","line_style" : 2})
+        gnu.add_curve(plot_minnloH20,{"format" : "histogram", "label" : "MiNNLO_{PS} (0A)","line_style" : 2})
+        gnu.add_curve(plot_minnloH2soft,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA)","line_style" : 1})
+        gnu.add_curve(plot_minnloH2masFC,{"format" : "histogram", "label" : "MiNNLO_{PS} (MA_{FC})","line_style" : 3})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_minnlolhefo,{"format" : "histogram", "label" : "MiNNLO-FOatQ K_Q=0.5","line_style" : 3})
@@ -1228,6 +1192,8 @@ if __name__ == "__main__":
         gnu.set_plot_properties("normalization",1)
         gnu.set_plot_properties("ymin_ratio",0.7)
         gnu.set_plot_properties("ymax_ratio",1.3)
+        gnu.set_plot_properties("category","kQ=0.5")
+        
 #        gnu.set_plot_properties("ytics_ratio","")
 #        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
 #            gnu.set_plot_properties("rebin",1)
@@ -1246,11 +1212,11 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
+            gnu.set_plot_properties("xmax",400)
             gnu.set_plot_properties("rebin_above_x",4)
             gnu.set_plot_properties("min_x_for_rebin",400)
             gnu.set_plot_properties("ytics_ratio",0.1)
-            gnu.set_plot_properties("mytics_ratio",1)
+            gnu.set_plot_properties("mytics_ratio",2)
 
         if gnu.get_name().startswith("etaHiggs"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{H}")
@@ -2396,7 +2362,7 @@ if __name__ == "__main__":
 #        gnu.set_plot_properties("process","pp{/Symbol \256}W^+Z{/Symbol \256}e^+ e^{\342\210\222} {/Symbola μ}^+ {/Courier=30 ν}_{/Symbola μ}")
         gnu.set_plot_properties("process","t{/b t\u0305}H")
         gnu.set_plot_properties("collider","LHC")
-        gnu.set_plot_properties("energy","13.6 TeV")
+        gnu.set_plot_properties("energy","13 TeV")
 #        gnu.set_plot_properties("yunit","[fb]")
         #    gnu.set_plot_properties("reference","1111.1111")
         gnu.plot()
