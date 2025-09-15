@@ -573,8 +573,8 @@ set rmargin 2
             parameter_list["key_x"]  = 0.70 # x-position of key 
             parameter_list["key_y"]  = 0.27 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
-            parameter_list["key_x"]  = 0.70 # x-position of key 
-            parameter_list["key_y"]  = 0.19 # y-position of key 
+            parameter_list["key_x"]  = 0.90 # x-position of key 
+            parameter_list["key_y"]  = 0.22 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down left":
             parameter_list["key_x"]  = 0.55 # x-position of key 
             parameter_list["key_y"]  = 0.45 # y-position of key 
@@ -1128,7 +1128,7 @@ if __name__ == "__main__":
         
         plot_minnloH20 = plot
         plot_minnloH2soft = plot.replace("jun10-lheanalysis-MiNNLOPSkQ025","jul26-lheanalysis-MiNNLOPSk025soft")
-        plot_minnloH2masFC = plot.replace("jun10-lheanalysis-MiNNLOPSkQ025","aug10-lheanalysis-MiNNLOPSk025massFC")
+#        plot_minnloH2masFC = plot.replace("jun10-lheanalysis-MiNNLOPSkQ025","aug10-lheanalysis-MiNNLOPSk025massFC")
 
 
         counter = 0
@@ -1157,9 +1157,15 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_nnll,{"format" : "histogram", "label" : "NNLO-NNLL' (MW)","line_style" : 2})
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
+
+
         gnu.add_curve(plot_minnloH20,{"format" : "histogram", "label" : "MiNNLO_{PS} (0A)","line_style" : 2})
-        gnu.add_curve(plot_minnloH2soft,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA)","line_style" : 1})
-        gnu.add_curve(plot_minnloH2masFC,{"format" : "histogram", "label" : "MiNNLO_{PS} (MA_{FC})","line_style" : 3})
+        gnu.add_curve(plot_minnloH2soft,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA)","line_style" : 4})
+#        gnu.add_curve(plot_minnloH2masFC,{"format" : "histogram", "label" : "MiNNLO_{PS} (MA_{FC})","line_style" : 3})
+
+
+
+
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_minnlolhefo,{"format" : "histogram", "label" : "MiNNLO-FOatQ K_Q=0.5","line_style" : 3})
@@ -1192,7 +1198,7 @@ if __name__ == "__main__":
         gnu.set_plot_properties("normalization",1)
         gnu.set_plot_properties("ymin_ratio",0.7)
         gnu.set_plot_properties("ymax_ratio",1.3)
-        gnu.set_plot_properties("category","kQ=0.25")
+        gnu.set_plot_properties("category","k_{Q}=0.25")
         
 #        gnu.set_plot_properties("ytics_ratio","")
 #        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
@@ -1311,6 +1317,10 @@ if __name__ == "__main__":
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xmin",450)
+            gnu.set_plot_properties("rebin",2)
+            gnu.set_plot_properties("ymax",1.5)
+            gnu.set_plot_properties("xmax",900)
+            gnu.set_plot_properties("legend","down down")
 
         if gnu.get_name().startswith("pttop"):
             gnu.set_plot_properties("xlabel","p_{T,t}")

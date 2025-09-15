@@ -1192,7 +1192,7 @@ if __name__ == "__main__":
         gnu.set_plot_properties("normalization",1)
         gnu.set_plot_properties("ymin_ratio",0.7)
         gnu.set_plot_properties("ymax_ratio",1.3)
-        gnu.set_plot_properties("category","kQ=0.5")
+        gnu.set_plot_properties("category","k_{Q}=0.5")
         
 #        gnu.set_plot_properties("ytics_ratio","")
 #        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
