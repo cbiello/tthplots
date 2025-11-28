@@ -237,7 +237,7 @@ class gnuplot():
         rebin_above_x = self.plot_properties.get("rebin_above_x","")
         # special case: for njets plots we must add the total rate between x-values of -1 and 0
         add_total_rate = None
-        if path.rsplit('/',1)[1].startswith("n_hjets"):
+        if path.rsplit('/',1)[1].startswith("n_jets"):
             # get the corresponding total rate
             total_path = pjoin(path.rsplit('/',1)[0],path.rsplit('/',1)[1].replace("n_jets","total_rate"))
             with open(total_path, 'r') as f:
@@ -567,10 +567,10 @@ set rmargin 2
             parameter_list["key_x"]  = 0.68 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down":
-            parameter_list["key_x"]  = 0.92 # x-position of key 
+            parameter_list["key_x"]  = 0.82 # x-position of key 
             parameter_list["key_y"]  = 0.32 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down center":
-            parameter_list["key_x"]  = 0.69 # x-position of key 
+            parameter_list["key_x"]  = 0.84 # x-position of key 
             parameter_list["key_y"]  = 0.27 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
             parameter_list["key_x"]  = 0.80 # x-position of key 
@@ -786,7 +786,7 @@ set format y %(format_y)s
 set key at graph %(key_x)s, %(key_y)s
 #set label \"ratio to %(norm_label)s\" at graph 0, 1.01
 set label \"d{/Symbol s}/d{/Symbol s}_{%(norm_label)s}\" at graph 0, 1.1
-set label \"%(category)s\" at graph 0.03, 1.3
+set label \"%(category)s\" at graph 0.03, 2.5
 set label \"%(categoryleft)s\" at graph 0.03, 2.35
 set label \"%(categorydownleft)s\" at graph 0.03, 2.2
 set yrange [%(ymin_ratio)s:%(ymax_ratio)s]
@@ -1113,7 +1113,7 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
 
 if __name__ == "__main__":
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"MATRIX_NNLO_31_inclusive_sumETscale-run/distributions/*.dat"))
-    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/nov24-HaafromPY8-scales-run/distributions/*.dat"))
+    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/nov8-collectDAT/CAFC-RFvar-merge2-run/distributions/*.dat"))
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"run_nnpdf31_new_kq05_inclusive_lhef-run/distributions/*.dat"))
 
     out = print_output()
@@ -1137,8 +1137,8 @@ if __name__ == "__main__":
 #        plot_MATRIX_NNLO_31_inclusive_sumET = plot
 #        plot_exact = plot
         plot_scales = plot
-        plot_eta = plot.replace("scales","error")
-        plot_NLO = plot.replace("nov24-HaafromPY8-scales","nov26-HaafromPY8-NLO")
+        plot_eta = plot.replace("RFvar","ETvar")
+        plotH20_scales = plot.replace("nov8-collectDAT/CAFC-RFvar-merge2","sep19mQQF-NLO13TeV-exa").replace("CAFC-RFvar-merge2","sep19mQQF-NLO13TeV-exa")
 #        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
 #        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
 #        plot_minnlofo = plot.replace("pths-h50-k025-lhe","FOhs-h50-k025-lhe").replace("MiNNLOlhe1","MiNNLOlhe2")
@@ -1195,9 +1195,9 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 1})
+        gnu.add_curve(plotH20_scales,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 3})
         gnu.add_curve(plot_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 7pt-sv)","line_style" : 2})
         gnu.add_curve(plot_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 2l-unc)","line_style" : 1})
-        gnu.add_curve(plot_NLO,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 3})
 #        gnu.add_curve(plot_etaH,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA, Q/2)","line_style" : 1})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
@@ -1229,25 +1229,17 @@ if __name__ == "__main__":
 
 
         gnu.set_plot_properties("normalization",1)
-        gnu.set_plot_properties("ymin_ratio",0.65)
-        gnu.set_plot_properties("ymax_ratio",1.15)
+        gnu.set_plot_properties("ymin_ratio",0.8)
+        gnu.set_plot_properties("ymax_ratio",1.4)
         gnu.set_plot_properties("ytics_ratio",0.1)
-#        if not gnu.get_name().startswit("ATLAhS_") and not gnu.get_name().startswith("total_"):
+#        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
 #            gnu.set_plot_properties("rebin",1)
         # if gnu.get_name().startswith("ATLAS_"):
         #     continue
         # if "j1" in plot or "j2" in plot:
         #     continue
 
-        if "aafid" in gnu.get_name():
-            gnu.set_plot_properties("category","fidcuts1")
-
-        if "aafidR2" in gnu.get_name():
-            gnu.set_plot_properties("category","fidcuts2")
-
-        if "aafidR3" in gnu.get_name():
-            gnu.set_plot_properties("category","fidcuts3")
-
+        gnu.set_plot_properties("rebin",1)
 
         if gnu.get_name().startswith("xsec"):
             gnu.set_plot_properties("xlabel","total")
@@ -1257,46 +1249,19 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",450)
+            gnu.set_plot_properties("rebin_above_x",2)
+            gnu.set_plot_properties("min_x_for_rebin",250)
             gnu.set_plot_properties("ytics_ratio",0.1)
             gnu.set_plot_properties("mytics_ratio",1)
-
-
-        if gnu.get_name().startswith("PTH"):
-            gnu.set_plot_properties("xlabel","p_{T,{/Symbol gg}}")
-            gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xunit","GeV")
-            gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("ymax",0.1)
-            gnu.set_plot_properties("xmax",1000)
-
-        if gnu.get_name().startswith("YH"):
-            gnu.set_plot_properties("xlabel","|y|_{{/Symbol gg}}")
-            gnu.set_plot_properties("logscale_y",False)
-            gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("xmax",2.5)
-
-        if gnu.get_name().startswith("detaaa"):
-            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{{/Symbol g},{/Symbol g}}")
-            gnu.set_plot_properties("logscale_y",False)
-            gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("xmax",2)
-            gnu.set_plot_properties("rebin",2)
-            gnu.set_plot_properties("ymax",0.4)
-
-        if gnu.get_name().startswith("dphiaa"):
-            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{{/Symbol g},{/Symbol g}}")
-            gnu.set_plot_properties("logscale_y",False)
-            gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("legend","down")
 
         if gnu.get_name().startswith("etaHiggs"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
 
         if gnu.get_name().startswith("yHiggs"):
             gnu.set_plot_properties("xlabel","y_{H}")
@@ -1318,11 +1283,14 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("dyHiggstop"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphiHiggstop"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{H,t}")
@@ -1340,6 +1308,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 #-------------------------------------------------------------------------------
 
@@ -1347,11 +1316,14 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("dyHiggstbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphiHiggstbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{H,{/b t\u0305}}")
@@ -1369,6 +1341,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 #---------------------------------------------------------------------------------------------
 
@@ -1377,15 +1350,17 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-#            gnu.set_plot_properties("xmax",800)
+            gnu.set_plot_properties("xmax",500)
             gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("min_x_for_rebin",300)
+            gnu.set_plot_properties("ymin_ratio",0.5)
             
         if gnu.get_name().startswith("massHiggs+top+tbar"):
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",450)
+            gnu.set_plot_properties("xmin",480)
+            gnu.set_plot_properties("rebin",3)
             gnu.set_plot_properties("legend","down center")
 
         if gnu.get_name().startswith("pttop"):
@@ -1393,18 +1368,18 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",450)
+            gnu.set_plot_properties("rebin_above_x",2)
+            gnu.set_plot_properties("min_x_for_rebin",300)
 
         if gnu.get_name().startswith("pttbar"):
             gnu.set_plot_properties("xlabel","p_{T,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",450)
+            gnu.set_plot_properties("rebin_above_x",2)
+            gnu.set_plot_properties("min_x_for_rebin",300)
 #---------------------------------------------------------------------------------------------
             
         if gnu.get_name().startswith("etatop"):
@@ -1412,31 +1387,35 @@ if __name__ == "__main__":
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymax",150)
+            gnu.set_plot_properties("ymax",140)
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
+            
 
         if gnu.get_name().startswith("etatbar"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymax",150)
+            gnu.set_plot_properties("ymax",140)
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
 
         if gnu.get_name().startswith("ytop"):
             gnu.set_plot_properties("xlabel","y_{t}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
+            gnu.set_plot_properties("xmin",-2.6)
+            gnu.set_plot_properties("xmax",2.6)
 
         if gnu.get_name().startswith("ytbar"):
             gnu.set_plot_properties("xlabel","y_{{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymin",-50)
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
+            gnu.set_plot_properties("xmin",-2.6)
+            gnu.set_plot_properties("xmax",2.5)
 
 #---------------------------------------------------------------------------------------------            
             
@@ -1444,26 +1423,29 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",320)
+            gnu.set_plot_properties("xmin",360)
 
         if gnu.get_name().startswith("ptt+tbar"):
             gnu.set_plot_properties("xlabel","p_{T,t{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",450)
+            gnu.set_plot_properties("rebin_above_x",2)
+            gnu.set_plot_properties("min_x_for_rebin",250)
 
         if gnu.get_name().startswith("detattbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("dyttbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphittbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{t,{/b t\u0305}}")
@@ -1481,6 +1463,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 # -----------------------------------------------------------------------------------------------
 
@@ -1493,6 +1476,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{t{/b t\u0305},H}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 
 
@@ -2436,7 +2420,7 @@ if __name__ == "__main__":
 
 #        gnu.set_plot_properties("ylabel","d{/Symbol s}/bin")
 #        gnu.set_plot_properties("process","pp{/Symbol \256}W^+Z{/Symbol \256}e^+ e^{\342\210\222} {/Symbola μ}^+ {/Courier=30 ν}_{/Symbola μ}")
-        gnu.set_plot_properties("process","t{/b t\u0305}H({/Symbol gg})")
+        gnu.set_plot_properties("process","t{/b t\u0305}H")
         gnu.set_plot_properties("collider","LHC")
         gnu.set_plot_properties("energy","13 TeV")
 #        gnu.set_plot_properties("yunit","[fb]")
