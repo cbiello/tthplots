@@ -561,7 +561,7 @@ set rmargin 2
         parameter_list["MATRIX_reference"] = self.plot_properties.get("reference","XXXX.XXXXX") # set it to something meaningful later
 # not used    parameter_list["MATRIX_version"] = self.plot_properties.get("version","0.0.1alpha") # set it to something meaningful later
         if self.plot_properties.get("legend","right") == "right":
-            parameter_list["key_x"]  = 1.00 # x-position of key 
+            parameter_list["key_x"]  = 1.02 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "left":
             parameter_list["key_x"]  = 0.68 # x-position of key 
@@ -571,7 +571,7 @@ set rmargin 2
             parameter_list["key_y"]  = 0.32 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down center":
             parameter_list["key_x"]  = 0.69 # x-position of key 
-            parameter_list["key_y"]  = 0.27 # y-position of key 
+            parameter_list["key_y"]  = 0.37 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
             parameter_list["key_x"]  = 0.80 # x-position of key 
             parameter_list["key_y"]  = 0.19 # y-position of key 
@@ -657,10 +657,10 @@ set style line 4 dt (9,6) lc rgb \"black\" lw 1
 set style line 13 dt (8,4,8,4,3,4) lc rgb \"blue\" lw 0.1
 set style line 14 dt (8,4,8,4,3,4) lc rgb \"black\" lw 0.1
 #NLOPS 5FS (LHE 5, PS 6)
-set style line 5 dt (15,2) lc rgb \"violet\" lw 1
-set style line 6 dt (15,2) lc rgb \"purple\" lw 1
-set style line 15 dt (10,3,3,3) lc rgb \"violet\" lw 0.1
-set style line 16 dt (10,3,3,3) lc rgb \"purple\" lw 0.1
+set style line 5 dt (15,2) lc rgb \"light-pink\" lw 1
+set style line 6 dt (15,2) lc rgb \"dark-violet\" lw 1
+set style line 15 dt (10,3,3,3) lc rgb \"light-pink\" lw 0.1
+set style line 16 dt (10,3,3,3) lc rgb \"dark-violet\" lw 0.1
 #MiNNLOPS 4FS (LHE 7 PS 8)
 set style line 7 dt (3,3) lc rgb \"light-red\" lw 1 
 set style line 8 dt (3,3) lc rgb \"dark-orange\" lw 1
@@ -757,7 +757,7 @@ set origin 0, 0.11
         parameter_list["xtics_add"] = self.plot_properties.get("xtics_add","")
         parameter_list["norm_label"] = self.plot_properties.get("norm_label",self.curve_properties[norm].get("label",order[self.plot_properties.get("normalization",len(self.curve_list))-1]))
         if self.plot_properties.get("legend_ratio","right") == "right":
-            parameter_list["key_x"]  = 0.93 # x-position of key 
+            parameter_list["key_x"]  = 0.95 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend_ratio","right") == "left":
             parameter_list["key_x"]  = 0.34 # x-position of key 
@@ -1139,6 +1139,7 @@ if __name__ == "__main__":
         plot_scales = plot
         plot_eta = plot.replace("RFvar","ETvar")
         plotLC_scales = plot.replace("CAFC-RFvar-merge2","CALC-RFvar")
+        plotLC_eta = plotLC_scales.replace("RFvar","ETvar")
 #        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
 #        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
 #        plot_minnlofo = plot.replace("pths-h50-k025-lhe","FOhs-h50-k025-lhe").replace("MiNNLOlhe1","MiNNLOlhe2")
@@ -1195,9 +1196,10 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 1})
-        gnu.add_curve(plot_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, RF)","line_style" : 2})
-        gnu.add_curve(plot_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, ET)","line_style" : 1})
-        gnu.add_curve(plotLC_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{LC}, RF)","line_style" : 5})
+        gnu.add_curve(plot_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 7pt-sv)","line_style" : 2})
+        gnu.add_curve(plot_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 2l-unc)","line_style" : 1})
+        gnu.add_curve(plotLC_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{LC}, 7pt-sv)","line_style" : 5})
+        gnu.add_curve(plotLC_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{LC}, 2l-unc)","line_style" : 6})
 #        gnu.add_curve(plot_etaH,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA, Q/2)","line_style" : 1})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
@@ -1249,11 +1251,11 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",350)
+            gnu.set_plot_properties("rebin",2)
             gnu.set_plot_properties("ytics_ratio",0.1)
             gnu.set_plot_properties("mytics_ratio",1)
+            gnu.set_plot_properties("logscale_y",False)
 
         if gnu.get_name().startswith("etaHiggs"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{H}")
@@ -1348,8 +1350,10 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",450)
-            gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",480)
+            gnu.set_plot_properties("rebin",4)
+            gnu.set_plot_properties("ymax",1.8)
+#            gnu.set_plot_properties("legend","down center")
 
         if gnu.get_name().startswith("pttop"):
             gnu.set_plot_properties("xlabel","p_{T,t}")
@@ -1407,16 +1411,22 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",320)
+            gnu.set_plot_properties("xmin",360)
+            gnu.set_plot_properties("rebin",1)
+            gnu.set_plot_properties("xmax",900)
+            gnu.set_plot_properties("rebin_above_x",2)
+            gnu.set_plot_properties("min_x_for_rebin",700)
+            
 
         if gnu.get_name().startswith("ptt+tbar"):
             gnu.set_plot_properties("xlabel","p_{T,t{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",400)
+            gnu.set_plot_properties("rebin",2)
+            gnu.set_plot_properties("logscale_y",False)
+#            gnu.set_plot_properties("legend","down center")
 
         if gnu.get_name().startswith("detattbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{t,{/b t\u0305}}")
