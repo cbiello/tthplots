@@ -1137,7 +1137,7 @@ if __name__ == "__main__":
 #        plot_MATRIX_NNLO_31_inclusive_sumET = plot
 #        plot_exact = plot
         plot_scales = plot
-        plot_eta = plot.replace("scales","error")
+        plot_eta = plot.replace("scales","errorETO")
         plot_NLO = plot.replace("nov24-HaafromPY8-scales","nov26-HaafromPY8-NLO")
 #        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
 #        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
@@ -1195,9 +1195,9 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 1})
+        gnu.add_curve(plot_NLO,{"format" : "histogram", "label" : "NLO+PS (exact)","line_style" : 3})
         gnu.add_curve(plot_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 7pt-sv)","line_style" : 2})
         gnu.add_curve(plot_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 2l-unc)","line_style" : 1})
-        gnu.add_curve(plot_NLO,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 3})
 #        gnu.add_curve(plot_etaH,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA, Q/2)","line_style" : 1})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
@@ -1229,8 +1229,8 @@ if __name__ == "__main__":
 
 
         gnu.set_plot_properties("normalization",1)
-        gnu.set_plot_properties("ymin_ratio",0.65)
-        gnu.set_plot_properties("ymax_ratio",1.15)
+        gnu.set_plot_properties("ymin_ratio",0.85)
+        gnu.set_plot_properties("ymax_ratio",1.35)
         gnu.set_plot_properties("ytics_ratio",0.1)
 #        if not gnu.get_name().startswit("ATLAhS_") and not gnu.get_name().startswith("total_"):
 #            gnu.set_plot_properties("rebin",1)
@@ -1243,7 +1243,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("category","fidcuts1")
 
         if "aafidR2" in gnu.get_name():
-            gnu.set_plot_properties("category","fidcuts2")
+            gnu.set_plot_properties("category","fidcuts")
 
         if "aafidR3" in gnu.get_name():
             gnu.set_plot_properties("category","fidcuts3")

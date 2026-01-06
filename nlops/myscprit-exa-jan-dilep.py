@@ -564,14 +564,14 @@ set rmargin 2
             parameter_list["key_x"]  = 1.00 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "left":
-            parameter_list["key_x"]  = 0.58 # x-position of key 
+            parameter_list["key_x"]  = 0.68 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down":
             parameter_list["key_x"]  = 0.82 # x-position of key 
-            parameter_list["key_y"]  = 0.22 # y-position of key 
+            parameter_list["key_y"]  = 0.32 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down center":
             parameter_list["key_x"]  = 0.80 # x-position of key 
-            parameter_list["key_y"]  = 0.27 # y-position of key 
+            parameter_list["key_y"]  = 0.30 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
             parameter_list["key_x"]  = 0.80 # x-position of key 
             parameter_list["key_y"]  = 0.19 # y-position of key 
@@ -647,14 +647,14 @@ set format x \"\"
         settings_main_frame = """
 ## define line styles
 #MiNNLOPS 5FS (LHE 1, PS 2)
-set style line 1 lc rgb \"blue\" lw 1
+set style line 1 lc rgb \"cyan\" lw 1
 set style line 2 lc rgb \"dark-blue\" lw 1
-set style line 11 dt (3,3) lc rgb \"blue\" lw 0.1
-set style line 12 dt (3,3) lc rgb \"dark-blue\" lw 0.1
+set style line 11 dt (3,3) lc rgb \"cyan\" lw 0.1
+set style line 12 lc rgb \"dark-blue\" lw 0.5
 #MiNLOp 5FS (LHE 3, PS 4)
-set style line 3 dt (9,6) lc rgb \"sienna4\" lw 1
+set style line 3 dt (9,6) lc rgb \"royalblue\" lw 1
 set style line 4 dt (9,6) lc rgb \"black\" lw 1
-set style line 13 dt (8,4,8,4,3,4) lc rgb \"sienna4\" lw 0.1
+set style line 13 dt (8,4,8,4,3,4) lc rgb \"royalblue\" lw 0.1
 set style line 14 dt (8,4,8,4,3,4) lc rgb \"black\" lw 0.1
 #NLOPS 5FS (LHE 5, PS 6)
 set style line 5 dt (15,2) lc rgb \"violet\" lw 1
@@ -678,8 +678,8 @@ set style line 9 lc rgb \"web-green\" lw 1
 #set style line 12 dt (3,3) lc rgb \"coral\" lw 0.1
 
 
-set style line 1 lc rgb \"red\" lw 1                                                                                                                                 
-set style line 11 dt (8,4,8,4,3,4) lc rgb \"red\" lw 0.1
+set style line 1 lc rgb \"brown\" lw 1                                                                                                                                 
+set style line 11 dt (8,4,8,4,3,4) lc rgb \"brown\" lw 0.1
 #set style line 2 dt (6,4) lc rgb \"slateblue1\" lw 1                                                                                                                 
 #set style line 12 dt (10,3,3,3) lc rgb \"slateblue1\" lw 0.1
 
@@ -1113,7 +1113,7 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
 
 if __name__ == "__main__":
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"MATRIX_NNLO_31_inclusive_sumETscale-run/distributions/*.dat"))
-    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/NNLO-run/distributions/*.dat"))
+    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/6jan-NLOdilep-exa-run/distributions/*.dat"))
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"run_nnpdf31_new_kq05_inclusive_lhef-run/distributions/*.dat"))
 
     out = print_output()
@@ -1125,11 +1125,45 @@ if __name__ == "__main__":
             continue
 
         gnu = gnuplot(os.getcwd())
+        
+#        plot_MATRIX_NNLO = plot
+#        plot_MATRIX_NNLO_30 = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_30-run")
+#        plot_MATRIX_NNLO_31_inclusive = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_31_inclusive-run")
 
-        plot_nnlo = plot
-        plot_exactNLO = plot.replace("NNLO-run","aug10-NLOexa-rew-run").replace("..NNLO.QCD","__aug10-NLOexa-rew")
-        plot_minlo = plot.replace("NNLO-run","jun10-lheanalysis-MiNLOkQ025-run").replace("..NNLO.QCD","__jun10-lheanalysis-MiNLOkQ025")
-        plot_minnlo = plot.replace("NNLO-run","jun10-lheanalysis-MiNNLOPSkQ025-run").replace("..NNLO.QCD","__jun10-lheanalysis-MiNNLOPSkQ025")
+#        plot_MATRIX_NNLO_31_inclusive_mT = plot
+#        plot_MATRIX_NNLO_31_inclusive_Q = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_Qscale").replace("NNLO_QCD","NNLO_QCD_Qscale")
+#        plot_MATRIX_NNLO_31_inclusive_fixed = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_fixedscale").replace("NNLO_QCD","NNLO_QCD_fixedscale")
+#        plot_MATRIX_NNLO_31_inclusive_sumET = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_sumETscale").replace("NNLO_QCD","NNLO_QCD_sumETscale")
+#        plot_MATRIX_NNLO_31_inclusive_sumET = plot
+        plot_exact = plot
+        plot_ca = plot.replace("exa","ca")
+        plot_caerr = plot.replace("exa","caerr")
+        
+#        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
+#        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
+#        plot_minnlofo = plot.replace("pths-h50-k025-lhe","FOhs-h50-k025-lhe").replace("MiNNLOlhe1","MiNNLOlhe2")
+#        plot_minnlolhefo = plot.replace("NNLLKQ05-run","FOh00-k05-clhe").replace("NNLLKQ05","MiNNLOlhe3")
+#        plot_nnlo5 = plot.replace("MiNNLO5FS-bjet","MiNNLO-test14jul") 
+#        plot_minnlo2= plot.replace("NNLO_NNLL_k025_zoom-run","pt-h50-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe1")
+#        plot_minnlo1= plot.replace("NNLO_NNLL_k025_zoom-run","pt51-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe4") 
+#        plot_nnll= plot.replace("NNLOmw-run","NNLO_NNLLmw-run").replace("NNLOmw","NNLO_NNLLmw")
+#        plot_minnlo2= plot.replace("NNLO-NNLL-40","NNPDF40-pt51-k025-lhe").replace("MW","MiNNLOlhe2")
+#        plot_4= plot.replace("FO40-h51-k025-Mpy6","FO40-h51-k075-Mpy1").replace("MiNNLOpy6","MiNNLOpy1")
+#        plot_3= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k05").replace("MW","MiNNLOpy")
+#        plot_4= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k075").replace("MiNNLOpy3","MiNNLOpy5")
+#        plot_4= plot.replace("PY0-run","PY1-r01-run").replace("PY0","PY1-r01")
+#        plot_lhe =  plot.replace("LHE-mh125", "LHE-mh200").replace("MiNNLOlhe","MiNNLOphe")
+#        plot_tre =  plot.replace("NNPDF30-FO51", "NNPDF30-pt51").replace("MiNNLO1","MiNNLO2")
+
+        # plot_third_run_lhef = plot.replace("MATRIX_NNLO", "third_run_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_third_run_high_stat_lhef = plot.replace("MATRIX_NNLO", "third_run_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_high_stat_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_new_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_new_kq05_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_kq05_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq05_inclusive_lhef")
+        # plot_run_nnpdf31_new_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "run_nnpdf31_new_kq1_inclusive_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq1_inclusive_lhef")
+#        plot_run_nnpdf31_new_kq05_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_sumETscale-run", "run_nnpdf31_new_kq05_inclusive_lhef-run").replace("__NNLO_QCD_sumETscale","__run_nnpdf31_new_kq05_inclusive_lhef")
+#        plot_run_nnpdf31_new_kq05_inclusive_final_lhef = plot.replace("MATRIX_NLOqq_EW_incl_sum-run", "NLO_lhef-run").replace("__NLOqq_EW","__NLO_lhef")
 
 
         counter = 0
@@ -1143,7 +1177,6 @@ if __name__ == "__main__":
 #            gnu.add_curve(plot_run_nnpdf31_lhef,{"format" : "histogram", "label" : "MiNNLO_{PS} low","line_style" : 3})
 #        if os.path.exists(plot_run_nnpdf31_high_stat_lhef):
 #            gnu.add_curve(plot_run_nnpdf31_high_stat_lhef,{"format" : "histogram", "label" : "MiNNLO_{PS} high","line_style" : 3}) #wrong
-
 ################## NEW RESULTS
 
 #        print plot_run_nnpdf31_new_kq05_inclusive_final_lhef
@@ -1158,9 +1191,9 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_nnll,{"format" : "histogram", "label" : "NNLO-NNLL' (MW)","line_style" : 2})
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
-        gnu.add_curve(plot_minnlo,{"format" : "histogram", "label" : "MiNNLO_{PS} (H_2=0)","line_style" : 2})
-        gnu.add_curve(plot_nnlo,{"format" : "histogram", "label" : "NNLO (H_2=0)","line_style" : 1})
-        gnu.add_curve(plot_minlo,{"format" : "histogram", "label" : "MiNLO'","line_style" : 4})
+        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO+PS (exact)","line_style" : 1})
+        gnu.add_curve(plot_ca,{"format" : "histogram", "label" : "NLO+PS (CA, 7pt-sv)","line_style" : 3})
+        gnu.add_curve(plot_caerr,{"format" : "histogram", "label" : "NLO+PS (CA, 1l-unc)","line_style" : 2})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_minnlolhefo,{"format" : "histogram", "label" : "MiNNLO-FOatQ K_Q=0.5","line_style" : 3})
@@ -1191,8 +1224,8 @@ if __name__ == "__main__":
 
 
         gnu.set_plot_properties("normalization",1)
-        gnu.set_plot_properties("ymin_ratio",0.7)
-        gnu.set_plot_properties("ymax_ratio",1.3)
+        gnu.set_plot_properties("ymin_ratio",0.8)
+        gnu.set_plot_properties("ymax_ratio",1.2)
 #        gnu.set_plot_properties("ytics_ratio","")
 #        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
 #            gnu.set_plot_properties("rebin",1)
@@ -1206,37 +1239,86 @@ if __name__ == "__main__":
         if gnu.get_name().startswith("xsec"):
             gnu.set_plot_properties("xlabel","total")
             
-        if gnu.get_name().startswith("ptHiggs"):
+        if gnu.get_name().startswith("ptH"):
             gnu.set_plot_properties("xlabel","p_{T,H}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",400)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
-            gnu.set_plot_properties("ytics_ratio",0.1)
-            gnu.set_plot_properties("mytics_ratio",2)
+            gnu.set_plot_properties("xmax",2000)
 
-        if gnu.get_name().startswith("etaHiggs"):
-            gnu.set_plot_properties("xlabel","{/Symbol h}_{H}")
-            gnu.set_plot_properties("logscale_y",False)
-            gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("legend","down center")
+        if gnu.get_name().startswith("ptsl"):
+            gnu.set_plot_properties("xlabel","p_{T,l}")
+            gnu.set_plot_properties("yunit","[fb/GeV]")
+            gnu.set_plot_properties("xunit","GeV")
+            gnu.set_plot_properties("category","softer lepton")
+            gnu.set_plot_properties("ymax",1)
+        if gnu.get_name().startswith("pthl"):
+            gnu.set_plot_properties("xlabel","p_{T,l}")
+            gnu.set_plot_properties("yunit","[fb/GeV]")
+            gnu.set_plot_properties("xunit","GeV")
+            gnu.set_plot_properties("category","harder lepton")
+            gnu.set_plot_properties("ymax",1)
 
-        if gnu.get_name().startswith("yHiggs"):
+            
+        if gnu.get_name().startswith("m2l"):
+            gnu.set_plot_properties("xlabel","m_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb/GeV]")
+            gnu.set_plot_properties("xunit","GeV")
+            
+        if gnu.get_name().startswith("yH"):
             gnu.set_plot_properties("xlabel","y_{H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
-            gnu.set_plot_properties("legend","down center")
 
-        if gnu.get_name().startswith("massHiggs"):
-            gnu.set_plot_properties("xlabel","m_{H}")
+        if gnu.get_name().startswith("yslep"):
+            gnu.set_plot_properties("xlabel","y_{l}")
             gnu.set_plot_properties("logscale_y",False)
-            gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",110)
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","softer lepton")
 
+        if gnu.get_name().startswith("yhlep"):
+            gnu.set_plot_properties("xlabel","y_{l}")
+            gnu.set_plot_properties("logscale_y",False)
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","harder lepton")
+
+            
+        if gnu.get_name().startswith("deta2l-nomcut"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("ymin",0.5)
+            gnu.set_plot_properties("category","no cuts")
+            
+        if gnu.get_name().startswith("deta2l-mcut80"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","m_{e,{/Symbol m}}<80 GeV")
+            gnu.set_plot_properties("ymax",3)
+
+        if gnu.get_name().startswith("deta2l-mcut200"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","80GeV<m_{e,{/Symbol m}}<200 GeV")
+
+        if gnu.get_name().startswith("deta2l-ptHcut20"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","p_{T,H}<20 GeV")
+            gnu.set_plot_properties("ymax",0.5)
+
+        if gnu.get_name().startswith("deta2l-ptHcut50"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","p_{T,H}<50 GeV")
+
+        if gnu.get_name().startswith("deta2l-ptHcut100"):
+            gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{e,{/Symbol m}}")
+            gnu.set_plot_properties("yunit","[fb]")
+            gnu.set_plot_properties("category","p_{T,H}<100 GeV")
+
+            
+
+            
 #------------------------------------------------------------------------------------
         if gnu.get_name().startswith("detaHiggstop"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{H,t}")
@@ -1309,8 +1391,8 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",450)
-            gnu.set_plot_properties("rebin",3)
+            gnu.set_plot_properties("xmin",470)
+            gnu.set_plot_properties("legend","down center")
 
         if gnu.get_name().startswith("pttop"):
             gnu.set_plot_properties("xlabel","p_{T,t}")
@@ -1343,7 +1425,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymax",150)
+            gnu.set_plot_properties("ymax",110)
 
         if gnu.get_name().startswith("ytop"):
             gnu.set_plot_properties("xlabel","y_{t}")
@@ -1368,7 +1450,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",320)
+            gnu.set_plot_properties("xmin",340)
 
         if gnu.get_name().startswith("ptt+tbar"):
             gnu.set_plot_properties("xlabel","p_{T,t{/b t\u0305}}")

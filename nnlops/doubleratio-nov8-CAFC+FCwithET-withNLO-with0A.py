@@ -1,4 +1,4 @@
-#!/usr/bin/eAnv python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import re
@@ -179,6 +179,7 @@ class gnuplot():
         allowed_properties["normalization_constant"] = []
         allowed_properties["label"]  = [] # if empty everything is allowed (specify later)
         allowed_properties["exclude_from_ratio"]  = [True,False] # if empty everything is allowed (specify later)
+        allowed_properties["exclude_from_ratio2"]  = [True,False] # if empty everything is allowed (specify later)
         allowed_properties["exclude_from_main"]  = [True,False] # if empty everything is allowed (specify later)
         allowed_properties["uncertainties"]  = [True,False] # if empty everything is allowed (specify later)
         allowed_properties["show_uncertainties"]  = [True,False] # if empty everything is allowed (specify later)
@@ -468,6 +469,8 @@ class gnuplot():
         allowed_properties["ymax"]  = []
         allowed_properties["ymin_ratio"] = []
         allowed_properties["ymax_ratio"] = []
+        allowed_properties["ymin_ratio2"] = []
+        allowed_properties["ymax_ratio2"] = []
         allowed_properties["title"]    = []
         allowed_properties["process"]  = []
         allowed_properties["collider"] = []
@@ -500,6 +503,7 @@ class gnuplot():
         allowed_properties["mytics"] = []
         allowed_properties["norm_label"] = []
         allowed_properties["exclude_from_ratio"] = [] # must be a list
+        allowed_properties["exclude_from_ratio2"] = [] # must be a list        
         allowed_properties["exclude_from_main"] = [] # must be a list
         allowed_properties["legend"] = ["left","right","down","down down","down left","down center"] # must be a list
         allowed_properties["legend_ratio"] = ["left","right","down","down left"] # must be a list
@@ -528,20 +532,23 @@ class gnuplot():
             out_file.write(self.get_gnuplot_default_ratio()) # writes out the default general part
             out_file.write(self.get_gnuplot_settings_ratio()) # writes out the default general part
             out_file.write(self.get_gnuplot_plot_ratio()) # writes out the default general part
+            out_file.write(self.get_gnuplot_default_ratio2()) # SZ
+            out_file.write(self.get_gnuplot_settings_ratio2()) 
+            out_file.write(self.get_gnuplot_plot_ratio2()) 
 #}}}
 #{{{ def: get_gnuplot_default_general(self)
     def get_gnuplot_default_general(self):
         # function that returns the default general part to create the gnuplot file
         default_general = """
 reset
-set terminal pdfcairo enhanced dashed dl 1.5 lw 3 font \"Helvetica,29\" size 7.6, 8
+set terminal pdfcairo enhanced dashed dl 1.5 lw 3 font \"Helvetica,29\" size 7.6, 11.5
 set encoding utf8
 
 ## default key features
 #set key at graph 1.03,0.97
 set key reverse  # put text on right side
 set key Left     # left bounded text
-set key spacing 1.1
+set key spacing 1.5
 set key samplen 2
 ## to have a assisting grid of dashed lines
 set grid front
@@ -562,22 +569,22 @@ set rmargin 2
 # not used    parameter_list["MATRIX_version"] = self.plot_properties.get("version","0.0.1alpha") # set it to something meaningful later
         if self.plot_properties.get("legend","right") == "right":
             parameter_list["key_x"]  = 1.00 # x-position of key 
-            parameter_list["key_y"]  = 0.95 # y-position of key 
+            parameter_list["key_y"]  = 0.97 # y-position of key 
         elif self.plot_properties.get("legend","right") == "left":
-            parameter_list["key_x"]  = 0.58 # x-position of key 
+            parameter_list["key_x"]  = 0.71 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down":
-            parameter_list["key_x"]  = 0.82 # x-position of key 
-            parameter_list["key_y"]  = 0.22 # y-position of key 
+            parameter_list["key_x"]  = 0.74 # x-position of key 
+            parameter_list["key_y"]  = 0.44 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down center":
-            parameter_list["key_x"]  = 0.80 # x-position of key 
-            parameter_list["key_y"]  = 0.27 # y-position of key 
+            parameter_list["key_x"]  = 0.85 # x-position of key 
+            parameter_list["key_y"]  = 0.41 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down down":
-            parameter_list["key_x"]  = 0.80 # x-position of key 
-            parameter_list["key_y"]  = 0.19 # y-position of key 
+            parameter_list["key_x"]  = 0.91 # x-position of key 
+            parameter_list["key_y"]  = 0.44 # y-position of key 
         elif self.plot_properties.get("legend","right") == "down left":
-            parameter_list["key_x"]  = 0.55 # x-position of key 
-            parameter_list["key_y"]  = 0.45 # y-position of key 
+            parameter_list["key_x"]  = 0.49 # x-position of key 
+            parameter_list["key_y"]  = 0.44 # y-position of key 
         if is_number(self.get_axis_properties()["xtics"]): # only set it if a number is given
             parameter_list["xtics"]  = self.get_axis_properties()["xtics"]  # distance between big x-tics 
         else: # otherwise set it empty, as it will create bin labels below the main plot
@@ -592,7 +599,7 @@ set rmargin 2
         else:
             parameter_list["logscale_y"] = "#set logscale y"
             parameter_list["format_y"] = "" # format of the label of the y-tics
-        if self.plot_properties.get("logscale_x",False): parameter_list["logscale_x"] = "set logscale x" # determine wether x-achsis uses a logscale
+        if self.plot_properties.get("logscale_x",False): parameter_list["logscale_x"] = "set logscale x\n set grid mxtics xtics ytics" # determine wether x-achsis uses a logscale
         else: parameter_list["logscale_x"] = "#set logscale x"
         parameter_list["ytic_offset_x"] = self.plot_properties.get("ytic_offset_x",0)   # offset in x-direction of the label at the y-tics
         parameter_list["ytic_offset_y"] = self.plot_properties.get("ytic_offset_y",0.1) # offset in y-direction  of the label at the y-tics
@@ -618,7 +625,7 @@ set ytic offset %(ytic_offset_x)s, %(ytic_offset_y)s
 set format y %(format_y)s
 
 set label \"%(ylabel)s %(yunit)s\" at graph 0, 1.07
-set label \"%(title)s\" right at graph 1, graph 1.07
+set label \"%(title)s\" right at graph 1, graph 1.075
 
 set output \"%(pdf_file)s\"
 """ % parameter_list # takes the values from the parameter_list dictionary from the keys in the string
@@ -633,8 +640,8 @@ set output \"%(pdf_file)s\"
 ##############
 
 # origin, size of main frame
-set origin 0, 0.48
-set size 1, 0.47
+set origin 0, 0.575
+set size 1, 0.38
 set bmargin 0 # set marging to remove space
 set tmargin 0 # set margin to remove space
 set format x \"\"
@@ -649,13 +656,13 @@ set format x \"\"
 #MiNNLOPS 5FS (LHE 1, PS 2)
 set style line 1 lc rgb \"blue\" lw 1
 set style line 2 lc rgb \"dark-blue\" lw 1
-set style line 11 dt (3,3) lc rgb \"blue\" lw 0.1
+set style line 11 dt (3,3) lc rgb \"dark-blue\" lw 0.1
 set style line 12 dt (3,3) lc rgb \"dark-blue\" lw 0.1
 #MiNLOp 5FS (LHE 3, PS 4)
-set style line 3 dt (9,6) lc rgb \"sienna4\" lw 1
-set style line 4 dt (9,6) lc rgb \"black\" lw 1
-set style line 13 dt (8,4,8,4,3,4) lc rgb \"sienna4\" lw 0.1
-set style line 14 dt (8,4,8,4,3,4) lc rgb \"black\" lw 0.1
+set style line 3 dt (9,6) lc rgb \"orange\" lw 1
+set style line 4 dt (3,3,3,3) lc rgb \"black\" lw 1
+set style line 13 dt (8,4,8,4,3,4) lc rgb \"orange\" lw 0.1
+set style line 14 dt (3,3,3,3) lc rgb \"black\" lw 0.1
 #NLOPS 5FS (LHE 5, PS 6)
 set style line 5 dt (15,2) lc rgb \"violet\" lw 1
 set style line 6 dt (15,2) lc rgb \"purple\" lw 1
@@ -678,10 +685,10 @@ set style line 9 lc rgb \"web-green\" lw 1
 #set style line 12 dt (3,3) lc rgb \"coral\" lw 0.1
 
 
-set style line 1 lc rgb \"red\" lw 1                                                                                                                                 
-set style line 11 dt (8,4,8,4,3,4) lc rgb \"red\" lw 0.1
-#set style line 2 dt (6,4) lc rgb \"slateblue1\" lw 1                                                                                                                 
-#set style line 12 dt (10,3,3,3) lc rgb \"slateblue1\" lw 0.1
+set style line 1 lc rgb \"blue\" lw 1
+set style line 11 dt (8,4,8,4,3,4) lc rgb \"blue\" lw 0.1
+set style line 2 dt (6,4) lc rgb \"slateblue1\" lw 1                                                                                           
+set style line 12 dt (10,3,3,3) lc rgb \"slateblue1\" lw 0.1
 
         
 ## define ranges
@@ -739,8 +746,8 @@ unset logscale y
 unset format
 
 ## set ratio inset size
-set size 1, 0.32
-set origin 0, 0.11
+set size 1, 0.2
+set origin 0, 0.333
 """
         return default_ratio
 #}}}
@@ -754,17 +761,23 @@ set origin 0, 0.11
         parameter_list["category"] = self.plot_properties.get("category","")
         parameter_list["categoryleft"] = self.plot_properties.get("categoryleft","")
         parameter_list["categorydownleft"] = self.plot_properties.get("categorydownleft","")
+        parameter_list["categorysecondline"] = self.plot_properties.get("categorysecondline","")
+        parameter_list["categoryleftsecondline"] = self.plot_properties.get("categoryleftsecondline","")
+        parameter_list["categorydownsecondline"] = self.plot_properties.get("categorydownsecondline","")
+        parameter_list["category3"] = self.plot_properties.get("category3","")
+        parameter_list["categoryleft3"] = self.plot_properties.get("categoryleft3","")
+        parameter_list["categorydown3"] = self.plot_properties.get("categorydown3","")        
         parameter_list["xtics_add"] = self.plot_properties.get("xtics_add","")
         parameter_list["norm_label"] = self.plot_properties.get("norm_label",self.curve_properties[norm].get("label",order[self.plot_properties.get("normalization",len(self.curve_list))-1]))
         if self.plot_properties.get("legend_ratio","right") == "right":
-            parameter_list["key_x"]  = 0.93 # x-position of key 
+            parameter_list["key_x"]  = 1.02 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend_ratio","right") == "left":
             parameter_list["key_x"]  = 0.34 # x-position of key 
             parameter_list["key_y"]  = 0.95 # y-position of key 
         elif self.plot_properties.get("legend_ratio","right") == "down":
-            parameter_list["key_x"]  = 0.59 # x-position of key 
-            parameter_list["key_y"]  = 0.22 # y-position of key 
+            parameter_list["key_x"]  = 0.39 # x-position of key 
+            parameter_list["key_y"]  = 0.26 # y-position of key 
         if self.plot_properties.get("logscale_y_ratio",False):
             parameter_list["logscale_y"] = "set logscale y" # determine wether y-achsis uses a logscale
             parameter_list["format_y"] = "\"10^{\%T}\"" # format of the label of the y-tics
@@ -786,20 +799,22 @@ set format y %(format_y)s
 set key at graph %(key_x)s, %(key_y)s
 #set label \"ratio to %(norm_label)s\" at graph 0, 1.01
 set label \"d{/Symbol s}/d{/Symbol s}_{%(norm_label)s}\" at graph 0, 1.1
-set label \"%(category)s\" at graph 0.03, 2.5
-set label \"%(categoryleft)s\" at graph 0.03, 2.35
-set label \"%(categorydownleft)s\" at graph 0.03, 2.2
+set label \"%(category)s\" at graph 0.6, 0.89
+set label \"%(categoryleft)s\" at graph 0.05, 0.87
+set label \"%(categorydownleft)s\" at graph 0.52, 0.87
+set label \"%(categorysecondline)s\" at graph 0.69, 0.79
+set label \"%(categoryleftsecondline)s\" at graph 0.14, 0.77
+set label \"%(categorydownsecondline)s\" at graph 0.61, 0.77
+set xtics format ""
 set yrange [%(ymin_ratio)s:%(ymax_ratio)s]
 set ytics %(ytics_ratio)s
 set mytics %(mytics_ratio)s
 set ytic offset 0.4, 0
-set xtic offset %(xtic_offset_x)s,%(xtic_offset_y)s
-set xtics %(xtics)s
-set xtics add %(xtics_add)s
-set mxtics %(mxtics)s
-set xlabel offset 0,0.9
-set xlabel  \"%(xlabel)s %(xunit)s\"
-""" % dict(list(self.get_axislabels_and_units().items()) + list(self.get_axis_properties().items()) + list(parameter_list.items())) # concentrating the dictionaries (make sure no identical items)
+""" % dict(
+    list(self.get_axislabels_and_units().items()) +
+    list(self.get_axis_properties().items()) +
+    list(parameter_list.items())
+)
         return settings_ratio
 #}}}
 #{{{ def: get_gnuplot_plot_ratio(self)
@@ -822,6 +837,141 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
                 counter += 1
                 continue
             if counter > 1 and counter-1 not in self.plot_properties.get("exclude_from_ratio",[]) and not prop.get(last_curve,{}).get("exclude_from_ratio",False): plot_ratio += ",\\\n"
+            columns = 7 if prop[curve].get("uncertainties",True) else 3 # determine number of comlumns simply by wether unce
+            if prop[curve].get("format") == "data":
+                plot_ratio += "\"<awk \'NR%%2==0\' %s | paste %s /dev/stdin\" using 1:($2/$5):($3*$2/100/$5) with yerrorbars lc rgb \"dark-green\" lw 1 lt 7 ps 0.7 %s" % (norm,curve,"title \"%s\"" % prop[curve].get("label",order[counter-1]) if prop[curve].get("exclude_from_main" ,False) or counter in self.plot_properties.get("exclude_from_main",[]) else "notitle")
+#                plot_ratio += "\"<paste %s %s\" using 1:2/$5:($3*$2/100) with yerrorbars
+            else:
+                plot_ratio += "\"<paste %s %s\" using 1:($2/$%s) with lines ls %s %s" % (curve,norm,2+columns,line_style,"title \"%s\"" % prop[curve].get("label",order[counter-1]) if prop[curve].get("exclude_from_main" ,False) or counter in self.plot_properties.get("exclude_from_main",[]) else "notitle\\\n")
+#
+#
+            if prop[curve].get("uncertainties",True) and prop[curve].get("show_uncertainties",True):
+                plot_ratio += ", \"<paste %s %s\" using 1:($4/$%s):($6/$%s) with filledcurves ls %s fs transparent solid 0.15 notitle" % (curve,norm,2+columns,2+columns,line_style)
+                plot_ratio += ", \"<paste %s %s\" using 1:($4/$%s) with lines ls 1%s notitle" % (curve,norm,2+columns,line_style)
+                plot_ratio += ", \"<paste %s %s\" using 1:($6/$%s) with lines ls 1%s notitle" % (curve,norm,2+columns,line_style)
+            last_curve = curve
+            counter += 1
+
+        return plot_ratio
+#}}}
+#{{{ def: get_gnuplot_default_ratio2(self)
+    def get_gnuplot_default_ratio2(self):
+        # function that returns the default settings for the ratio frame to create the gnuplot file
+        default_ratio = """
+###############
+# ratio inset #
+###############
+
+## remove previous settings
+unset label  
+#unset key
+unset logscale y
+unset format
+
+## set ratio inset size
+set size 1, 0.2
+set origin 0, 0.09
+"""
+        return default_ratio
+#}}}
+#{{{ def: get_gnuplot_settings_ratio(self)
+    def get_gnuplot_settings_ratio2(self):
+        # function that returns the user-definable settings of the ratio frame to create the gnuplot file
+        order = ["LO","NLO","NNLO","N3LO","N4LO","N4LO","N4LO","N4LO","N4LO"] # use the order as the default label
+        norm = self.curve_list[self.plot_properties.get("normalization2",len(self.curve_list))-1] # gives the plot number that should be used for the normalization; default is to use the
+        parameter_list = {}
+        # set all parameters that you can modify below, so that they can be passed to the string
+        parameter_list["category2"] = self.plot_properties.get("category2","")
+        parameter_list["categoryleft2"] = self.plot_properties.get("categoryleft2","")
+        parameter_list["categorydown2"] = self.plot_properties.get("categorydown2","")
+        parameter_list["category2secondline"] = self.plot_properties.get("category2secondline","")
+        parameter_list["categoryleft2secondline"] = self.plot_properties.get("categoryleft2secondline","")
+        parameter_list["categorydown2secondline"] = self.plot_properties.get("categorydown2secondline","")
+        parameter_list["xtics_add"] = self.plot_properties.get("xtics_add","")
+        parameter_list["norm_label"] = self.plot_properties.get("norm_label",self.curve_properties[norm].get("label",order[self.plot_properties.get("normalization2",len(self.curve_list))-1]))
+        if self.plot_properties.get("legend_ratio","right") == "right":
+            parameter_list["key_x"]  = 1.00 # x-position of key 
+            parameter_list["key_y"]  = 0.95 # y-position of key 
+        elif self.plot_properties.get("legend_ratio","right") == "left":
+            parameter_list["key_x"]  = 0.34 # x-position of key 
+            parameter_list["key_y"]  = 0.95 # y-position of key 
+        elif self.plot_properties.get("legend_ratio","right") == "down":
+            parameter_list["key_x"]  = 0.70 # x-position of key 
+            parameter_list["key_y"]  = 0.26 # y-position of key
+
+
+
+
+
+
+
+
+ 
+        if self.plot_properties.get("logscale_y_ratio2",False):
+            parameter_list["logscale_y"] = "set logscale y" # determine wether y-achsis uses a logscale
+            parameter_list["format_y"] = "\"10^{\%T}\"" # format of the label of the y-tics
+            parameter_list["mytics_ratio"] = 10 # number of small y-tics between the big y-tics
+        else:
+            parameter_list["logscale_y"] = "#set logscale y"
+            parameter_list["format_y"] = "" # format of the label of the y-tics
+        if self.plot_properties.get("logscale_x_ratio",False): parameter_list["logscale_x"] = "set logscale x" # determin
+        else: parameter_list["logscale_x"] = "#set logscale x"
+        parameter_list["xtic_offset_x"] = self.plot_properties.get("xtic_offset_x",-0.21)  
+        parameter_list["xtic_offset_y"] = self.plot_properties.get("xtic_offset_y",0.4)
+
+
+        settings_ratio = """
+## can be changed
+%(logscale_y)s
+%(logscale_x)s
+set format y %(format_y)s
+set key at graph %(key_x)s, %(key_y)s
+#set label \"ratio to %(norm_label)s\" at graph 0, 1.01
+set label \"d{/Symbol s}/d{/Symbol s}_{%(norm_label)s}\" at graph 0, 1.12
+set label \"%(category2)s\" at graph 0.57, 0.89
+set label \"%(categoryleft2)s\" at graph 0.05, 0.87
+set label \"%(categorydown2)s\" at graph 0.50, 0.87
+set label \"%(category2secondline)s\" at graph 0.69, 0.79
+set label \"%(categoryleft2secondline)s\" at graph 0.14, 0.77
+set label \"%(categorydown2secondline)s\" at graph 0.61, 0.77
+set yrange [%(ymin_ratio2)s:%(ymax_ratio2)s]
+set ytics %(ytics_ratio)s
+set mytics %(mytics_ratio)s
+set ytic offset 0.4, 0
+set xtics auto
+set mxtics %(mxtics)s
+set xlabel offset 0,0.3
+set xlabel  \"%(xlabel)s %(xunit)s\"
+        """ % dict(
+    list(self.get_axislabels_and_units().items()) +
+    list(self.get_axis_properties().items()) +
+    list(parameter_list.items())
+)
+        return settings_ratio
+#}}}
+#{{{ def: get_gnuplot_plot_ratio2(self)
+    def get_gnuplot_plot_ratio2(self):
+        # function that returns the plotting of curves in the ratio frame to create the gnuplot file
+        plot_ratio = "plot "
+        counter = 1
+        order = ["LO","NLO","NNLO","N3LO","N4LO","N4LO","N4LO","N4LO","N4LO","N4LO"] # use the order as the default label
+        norm = self.curve_list[self.plot_properties.get("normalization2",len(self.curve_list))-1] 
+        prop = self.curve_properties # introduce local short-cut
+        last_curve = ""
+        first_curve = True
+        for curve in self.curve_list:
+            line_style = prop[curve].get("line_style",counter)
+            if counter in self.plot_properties.get("exclude_from_ratio2",[]): 
+                last_curve = curve
+                counter += 1
+                continue
+            if prop[curve].get("exclude_from_ratio2",False):
+                last_curve = curve
+                counter += 1
+                continue
+
+            if not first_curve: plot_ratio += ",\\\n"
+            else: first_curve = False
             columns = 7 if prop[curve].get("uncertainties",True) else 3 # determine number of comlumns simply by wether uncertainties are in file (7 columns) or not (3 columns)
             if prop[curve].get("format") == "data":
                 plot_ratio += "\"<awk \'NR%%2==0\' %s | paste %s /dev/stdin\" using 1:($2/$5):($3*$2/100/$5) with yerrorbars lc rgb \"dark-green\" lw 1 lt 7 ps 0.7 %s" % (norm,curve,"title \"%s\"" % prop[curve].get("label",order[counter-1]) if prop[curve].get("exclude_from_main" ,False) or counter in self.plot_properties.get("exclude_from_main",[]) else "notitle")
@@ -1019,6 +1169,10 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
         ymax_ratio = min(max(y_values_ratio),3)
         axis_dict["ymin_ratio"]   = self.plot_properties.get("ymin_ratio",ymin_ratio)
         axis_dict["ymax_ratio"]   = self.plot_properties.get("ymax_ratio",ymax_ratio)
+        axis_dict["ymin_ratio2"]  = self.plot_properties.get("ymin_ratio",ymin_ratio)
+        axis_dict["ymax_ratio2"]  = self.plot_properties.get("ymax_ratio",ymax_ratio)
+        if "ymin_ratio2" in self.plot_properties: axis_dict["ymin_ratio2"] = self.plot_properties["ymin_ratio2"]
+        if "ymax_ratio2" in self.plot_properties: axis_dict["ymax_ratio2"] = self.plot_properties["ymax_ratio2"]
         ytics_ratio = math.ceil((axis_dict["ymax_ratio"]-axis_dict["ymin_ratio"])/5*10)/10
         mytics_ratio= ytics_ratio/0.1
 
@@ -1113,7 +1267,7 @@ set xlabel  \"%(xlabel)s %(xunit)s\"
 
 if __name__ == "__main__":
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"MATRIX_NNLO_31_inclusive_sumETscale-run/distributions/*.dat"))
-    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/NNLO-run/distributions/*.dat"))
+    all_plots = glob.iglob(pjoin(os.getcwd(),"datfiles/nov8-collectDAT/CAFC-RFvar-merge2-run/distributions/*.dat"))
 #    all_plots = glob.iglob(pjoin(os.getcwd(),"run_nnpdf31_new_kq05_inclusive_lhef-run/distributions/*.dat"))
 
     out = print_output()
@@ -1125,11 +1279,48 @@ if __name__ == "__main__":
             continue
 
         gnu = gnuplot(os.getcwd())
+        
+#        plot_MATRIX_NNLO = plot
+#        plot_MATRIX_NNLO_30 = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_30-run")
+#        plot_MATRIX_NNLO_31_inclusive = plot.replace("MATRIX_NNLO-run", "MATRIX_NNLO_31_inclusive-run")
 
-        plot_nnlo = plot
-        plot_exactNLO = plot.replace("NNLO-run","aug10-NLOexa-rew-run").replace("..NNLO.QCD","__aug10-NLOexa-rew")
-        plot_minlo = plot.replace("NNLO-run","jun10-lheanalysis-MiNLOkQ025-run").replace("..NNLO.QCD","__jun10-lheanalysis-MiNLOkQ025")
-        plot_minnlo = plot.replace("NNLO-run","jun10-lheanalysis-MiNNLOPSkQ025-run").replace("..NNLO.QCD","__jun10-lheanalysis-MiNNLOPSkQ025")
+#        plot_MATRIX_NNLO_31_inclusive_mT = plot
+#        plot_MATRIX_NNLO_31_inclusive_Q = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_Qscale").replace("NNLO_QCD","NNLO_QCD_Qscale")
+#        plot_MATRIX_NNLO_31_inclusive_fixed = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_fixedscale").replace("NNLO_QCD","NNLO_QCD_fixedscale")
+#        plot_MATRIX_NNLO_31_inclusive_sumET = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "MATRIX_NNLO_31_inclusive_sumETscale").replace("NNLO_QCD","NNLO_QCD_sumETscale")
+#        plot_MATRIX_NNLO_31_inclusive_sumET = plot
+#        plot_exact = plot
+        plot_scales = plot
+        plot_eta = plot.replace("RFvar","ETOvar")
+        plot_NLOexa = plot.replace("nov8-collectDAT/CAFC-RFvar-merge2","sep19mQQF-NLO13TeV-exa").replace("CAFC-RFvar-merge2","sep19mQQF-NLO13TeV-exa")
+        plotH20_scales = plot.replace("nov8-collectDAT/CAFC-RFvar-merge2","scp-py8btlvio-H20-minnlo-kq025").replace("CAFC-RFvar-merge2","scp-py8btlvio-H20-minnlo-kq025")
+#        plot_Ht4 = plot.replace("PSfin-4FS-mh40-minnlo","PSfin-4FS-Ht40-minnlo")
+#        plot_5fs = plot.replace("MiNNLO4FSLHE16aug","MiNNLO5FSLHE")
+#        plot_minnlofo = plot.replace("pths-h50-k025-lhe","FOhs-h50-k025-lhe").replace("MiNNLOlhe1","MiNNLOlhe2")
+#        plot_minnlolhefo = plot.replace("NNLLKQ05-run","FOh00-k05-clhe").replace("NNLLKQ05","MiNNLOlhe3")
+#        plot_nnlo5 = plot.replace("MiNNLO5FS-bjet","MiNNLO-test14jul") 
+#        plot_minnlo2= plot.replace("NNLO_NNLL_k025_zoom-run","pt-h50-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe1")
+#        plot_minnlo1= plot.replace("NNLO_NNLL_k025_zoom-run","pt51-k025-lhe").replace("NNLO_NNLL_k025_zoom","MiNNLOlhe4") 
+#        plot_nnll= plot.replace("NNLOmw-run","NNLO_NNLLmw-run").replace("NNLOmw","NNLO_NNLLmw")
+#        plot_minnlo2= plot.replace("NNLO-NNLL-40","NNPDF40-pt51-k025-lhe").replace("MW","MiNNLOlhe2")
+#        plot_4= plot.replace("FO40-h51-k025-Mpy6","FO40-h51-k075-Mpy1").replace("MiNNLOpy6","MiNNLOpy1")
+#        plot_3= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k05").replace("MW","MiNNLOpy")
+#        plot_4= plot.replace("NNPDF40-FO51-k025","NNPDF40-FO51-k075").replace("MiNNLOpy3","MiNNLOpy5")
+#        plot_4= plot.replace("PY0-run","PY1-r01-run").replace("PY0","PY1-r01")
+#        plot_lhe =  plot.replace("LHE-mh125", "LHE-mh200").replace("MiNNLOlhe","MiNNLOphe")
+#        plot_tre =  plot.replace("NNPDF30-FO51", "NNPDF30-pt51").replace("MiNNLO1","MiNNLO2")
+
+        # plot_third_run_lhef = plot.replace("MATRIX_NNLO", "third_run_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_third_run_high_stat_lhef = plot.replace("MATRIX_NNLO", "third_run_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_high_stat_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_high_stat_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_new_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_lhef").replace("NNLO_QCD","run_nnpdf31_new_inclusive_lhef")
+        # plot_run_nnpdf31_new_kq05_lhef = plot.replace("MATRIX_NNLO", "run_nnpdf31_new_kq05_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq05_inclusive_lhef")
+        # plot_run_nnpdf31_new_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_mTscale", "run_nnpdf31_new_kq1_inclusive_lhef").replace("NNLO_QCD","run_nnpdf31_new_kq1_inclusive_lhef")
+#        plot_run_nnpdf31_new_kq05_inclusive_lhef = plot.replace("MATRIX_NNLO_31_inclusive_sumETscale-run", "run_nnpdf31_new_kq05_inclusive_lhef-run").replace("__NNLO_QCD_sumETscale","__run_nnpdf31_new_kq05_inclusive_lhef")
+#        plot_run_nnpdf31_new_kq05_inclusive_final_lhef = plot.replace("MATRIX_NLOqq_EW_incl_sum-run", "NLO_lhef-run").replace("__NLOqq_EW","__NLO_lhef")
+
+
 
 
         counter = 0
@@ -1158,9 +1349,12 @@ if __name__ == "__main__":
 #        gnu.add_curve(plot_nnll,{"format" : "histogram", "label" : "NNLO-NNLL' (MW)","line_style" : 2})
 #        gnu.add_curve(plot_2,{"format" : "histogram", "label" : "MW K_Q=0.25","line_style" : 3})
 #        gnu.add_curve(plot_minnlopt,{"format" : "histogram", "label" : "MiNNLO K_Q=0.25 (LHE)","line_style" : 1})
-        gnu.add_curve(plot_minnlo,{"format" : "histogram", "label" : "MiNNLO_{PS} (H_2=0)","line_style" : 2})
-        gnu.add_curve(plot_nnlo,{"format" : "histogram", "label" : "NNLO (H_2=0)","line_style" : 1})
-        gnu.add_curve(plot_minlo,{"format" : "histogram", "label" : "MiNLO'","line_style" : 4})
+#        gnu.add_curve(plot_exact,{"format" : "histogram", "label" : "NLO_{PS} (exact)","line_style" : 1})
+        gnu.add_curve(plot_NLOexa,{"format" : "histogram", "label" : "NLO+PS (exact)","line_style" : 3, "exclude_from_ratio2" : True})
+        gnu.add_curve(plot_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 7pt-sv)","line_style" : 2})
+        gnu.add_curve(plot_eta,{"format" : "histogram", "label" : "MiNNLO_{PS} (CA_{FC}, 2l-unc)","line_style" : 1})
+        gnu.add_curve(plotH20_scales,{"format" : "histogram", "label" : "MiNNLO_{PS} (H_2=0, 7pt-sv)","line_style" : 4, "exclude_from_main" : True, "exclude_from_ratio" : True})
+#        gnu.add_curve(plot_etaH,{"format" : "histogram", "label" : "MiNNLO_{PS} (SA, Q/2)","line_style" : 1})
 #        gnu.add_curve(plot_Ht4,{"format" : "histogram", "label" : "MiNNLO_{PS} (4FS, {/Symbol m}_R^{(0),y}=H_T/4)","line_style" : 2})
 #        gnu.add_curve(plot_5fs,{"format" : "histogram", "label" : "MiNNLOPS 5FS (LHE)","line_style" : 1})
 #        gnu.add_curve(plot_minnlolhefo,{"format" : "histogram", "label" : "MiNNLO-FOatQ K_Q=0.5","line_style" : 3})
@@ -1191,9 +1385,9 @@ if __name__ == "__main__":
 
 
         gnu.set_plot_properties("normalization",1)
-        gnu.set_plot_properties("ymin_ratio",0.7)
-        gnu.set_plot_properties("ymax_ratio",1.3)
-#        gnu.set_plot_properties("ytics_ratio","")
+        gnu.set_plot_properties("ymin_ratio",0.8)
+        gnu.set_plot_properties("ymax_ratio",1.4)
+        gnu.set_plot_properties("ytics_ratio",0.1)
 #        if not gnu.get_name().startswith("ATLAS_") and not gnu.get_name().startswith("total_"):
 #            gnu.set_plot_properties("rebin",1)
         # if gnu.get_name().startswith("ATLAS_"):
@@ -1201,7 +1395,9 @@ if __name__ == "__main__":
         # if "j1" in plot or "j2" in plot:
         #     continue
 
-
+        gnu.set_plot_properties("rebin",1)
+        gnu.set_plot_properties("ymin_ratio2",0.8)
+        gnu.set_plot_properties("ymax_ratio2",1.2)
 
         if gnu.get_name().startswith("xsec"):
             gnu.set_plot_properties("xlabel","total")
@@ -1211,24 +1407,29 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",400)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",340)
+#            gnu.set_plot_properties("rebin_above_x",3)
+#            gnu.set_plot_properties("min_x_for_rebin",250)
             gnu.set_plot_properties("ytics_ratio",0.1)
-            gnu.set_plot_properties("mytics_ratio",2)
+            gnu.set_plot_properties("mytics_ratio",1)
+            gnu.set_plot_properties("rebin",2)
+            gnu.set_plot_properties("logscale_y",False)
 
         if gnu.get_name().startswith("etaHiggs"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
 
         if gnu.get_name().startswith("yHiggs"):
             gnu.set_plot_properties("xlabel","y_{H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
+            gnu.set_plot_properties("xmin",-2)
+            gnu.set_plot_properties("xmax",2)
+            gnu.set_plot_properties("rebin",1)
             gnu.set_plot_properties("legend","down center")
 
         if gnu.get_name().startswith("massHiggs"):
@@ -1242,11 +1443,14 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("dyHiggstop"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphiHiggstop"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{H,t}")
@@ -1264,6 +1468,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{H,t}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 #-------------------------------------------------------------------------------
 
@@ -1271,11 +1476,14 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",4)
 
         if gnu.get_name().startswith("dyHiggstbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphiHiggstbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{H,{/b t\u0305}}")
@@ -1293,6 +1501,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{H,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 #---------------------------------------------------------------------------------------------
 
@@ -1301,34 +1510,38 @@ if __name__ == "__main__":
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-#            gnu.set_plot_properties("xmax",800)
+            gnu.set_plot_properties("xmax",500)
             gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("min_x_for_rebin",300)
+            gnu.set_plot_properties("ymin_ratio",0.5)
             
         if gnu.get_name().startswith("massHiggs+top+tbar"):
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}H}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",450)
-            gnu.set_plot_properties("rebin",3)
+            gnu.set_plot_properties("xmin",480)
+            gnu.set_plot_properties("ymax",1.8)
+            gnu.set_plot_properties("rebin",4)
 
         if gnu.get_name().startswith("pttop"):
             gnu.set_plot_properties("xlabel","p_{T,t}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",320)
+            gnu.set_plot_properties("logscale_y",False)
+            gnu.set_plot_properties("ymax",3.5)
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("pttbar"):
             gnu.set_plot_properties("xlabel","p_{T,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",350)
+            gnu.set_plot_properties("logscale_y",False)
+            gnu.set_plot_properties("ymax",3.5)
+            gnu.set_plot_properties("rebin",2)
 #---------------------------------------------------------------------------------------------
             
         if gnu.get_name().startswith("etatop"):
@@ -1336,31 +1549,35 @@ if __name__ == "__main__":
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymax",150)
+            gnu.set_plot_properties("ymax",140)
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
+            
 
         if gnu.get_name().startswith("etatbar"):
             gnu.set_plot_properties("xlabel","{/Symbol h}_{{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymax",150)
+            gnu.set_plot_properties("ymax",140)
+            gnu.set_plot_properties("xmin",-3)
+            gnu.set_plot_properties("xmax",3)
 
         if gnu.get_name().startswith("ytop"):
             gnu.set_plot_properties("xlabel","y_{t}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
+            gnu.set_plot_properties("xmin",-2)
+            gnu.set_plot_properties("xmax",2)
 
         if gnu.get_name().startswith("ytbar"):
             gnu.set_plot_properties("xlabel","y_{{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
-            gnu.set_plot_properties("ymin",-50)
-            gnu.set_plot_properties("xmin",-3)
-            gnu.set_plot_properties("xmax",3)
+            gnu.set_plot_properties("xmin",-2)
+            gnu.set_plot_properties("xmax",2)
 
 #---------------------------------------------------------------------------------------------            
             
@@ -1368,26 +1585,32 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","m_{t{/b t\u0305}}")
             gnu.set_plot_properties("logscale_y",False)
             gnu.set_plot_properties("yunit","[fb/GeV]")
-            gnu.set_plot_properties("xmin",320)
+            gnu.set_plot_properties("xmin",360)
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("ptt+tbar"):
             gnu.set_plot_properties("xlabel","p_{T,t{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb/GeV]")
             gnu.set_plot_properties("xunit","GeV")
             gnu.set_plot_properties("xmin",0)
-            gnu.set_plot_properties("xmax",800)
-            gnu.set_plot_properties("rebin_above_x",4)
-            gnu.set_plot_properties("min_x_for_rebin",400)
+            gnu.set_plot_properties("xmax",350)
+            gnu.set_plot_properties("rebin",2)
+            gnu.set_plot_properties("rebin_above_x",3)
+            gnu.set_plot_properties("logscale_y",False)
+            gnu.set_plot_properties("min_x_for_rebin",250)
 
         if gnu.get_name().startswith("detattbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol h}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("rebin",2)
 
         if gnu.get_name().startswith("dyttbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{y}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmin",-2.4)
+            gnu.set_plot_properties("xmax",2.4)
             
         if gnu.get_name().startswith("dphittbar"):
             gnu.set_plot_properties("xlabel","{/Symbol D}{/Symbol f}_{t,{/b t\u0305}}")
@@ -1405,6 +1628,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{t,{/b t\u0305}}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 # -----------------------------------------------------------------------------------------------
 
@@ -1417,6 +1641,7 @@ if __name__ == "__main__":
             gnu.set_plot_properties("xlabel","{/Symbol D}{R^y}_{t{/b t\u0305},H}")
             gnu.set_plot_properties("yunit","[fb]")
             gnu.set_plot_properties("legend","down center")
+            gnu.set_plot_properties("xmax",4)
 
 
 
